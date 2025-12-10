@@ -1,11 +1,30 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { type QueryInfo } from './services/queryLoader';
 
 interface IntegrationState {
-  availableQueries: string[];
-  setAvailableQueries: (queries: string[]) => void;
+  availableQueries: QueryInfo[];
+  directoryHandle: FileSystemDirectoryHandle | null;
+  setAvailableQueries: (queries: QueryInfo[]) => void;
+  setDirectoryHandle: (handle: FileSystemDirectoryHandle | null) => void;
+  getQueryByName: (name: string) => QueryInfo | undefined;
 }
 
-export const useIntegrationStore = create<IntegrationState>((set) => ({
-  availableQueries: [],
-  setAvailableQueries: (queries) => set({ availableQueries: queries }),
-}));
+export const useIntegrationStore = create<IntegrationState>()(
+  persist(
+    (set, get) => ({
+      availableQueries: [],
+      directoryHandle: null,
+      setAvailableQueries: (queries) => set({ availableQueries: queries }),
+      setDirectoryHandle: (handle) => set({ directoryHandle: handle }),
+      getQueryByName: (name) => get().availableQueries.find(q => q.name === name),
+    }),
+    {
+      name: 'graf3ql:integration',
+      partialize: (state) => ({ 
+        // Solo persistir las queries, no el handle (no es serializable)
+        availableQueries: state.availableQueries 
+      }),
+    }
+  )
+);

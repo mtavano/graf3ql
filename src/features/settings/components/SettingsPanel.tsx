@@ -7,7 +7,7 @@ import { useIntegrationStore } from '../../integration/store';
 
 export const SettingsPanel: React.FC = () => {
   const { isSettingsOpen, toggleSettings, f3QaPath, setF3QaPath } = useSettingsStore();
-  const setAvailableQueries = useIntegrationStore(state => state.setAvailableQueries);
+  const { availableQueries, setAvailableQueries, setDirectoryHandle } = useIntegrationStore();
 
   if (!isSettingsOpen) return null;
 
@@ -16,6 +16,7 @@ export const SettingsPanel: React.FC = () => {
       // @ts-ignore - File System Access API
       const handle = await window.showDirectoryPicker();
       setF3QaPath(handle.name);
+      setDirectoryHandle(handle);
       const queries = await loadQueriesFromDirectory(handle);
       setAvailableQueries(queries);
     } catch (e) {
@@ -54,6 +55,11 @@ export const SettingsPanel: React.FC = () => {
             <p className="text-xs text-text-muted mt-1">
               Select the local f3-qa repository to load queries automatically.
             </p>
+            {availableQueries.length > 0 && (
+              <p className="text-xs text-neon-green mt-2">
+                ✓ {availableQueries.length} queries loaded
+              </p>
+            )}
           </div>
         </div>
       </div>

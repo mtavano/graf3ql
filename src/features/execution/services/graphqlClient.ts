@@ -1,5 +1,5 @@
 // URL del proxy server
-const PROXY_URL = import.meta.env.VITE_PROXY_URL || 'http://localhost:3001/api/proxy';
+const PROXY_URL = import.meta.env.VITE_PROXY_URL || 'http://localhost:3005/api/proxy';
 
 export interface GraphQLResponse {
   data: any;

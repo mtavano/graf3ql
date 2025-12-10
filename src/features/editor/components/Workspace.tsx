@@ -132,10 +132,13 @@ export const Workspace: React.FC = () => {
                     <span className="text-text-muted">Saved</span>
                   )}
                 </div>
-                <div className="flex-1 min-h-0 overflow-auto p-4">
-                  <pre className="text-xs font-mono text-text-secondary">
-                    {ticket.originalResponse ? JSON.stringify(ticket.originalResponse, null, 2) : 'No original response saved'}
-                  </pre>
+                <div className="flex-1 min-h-0">
+                  <MonacoEditorWrapper
+                    language="json"
+                    value={ticket.originalResponse ? JSON.stringify(ticket.originalResponse, null, 2) : '// No original response saved'}
+                    onChange={() => {}}
+                    readOnly
+                  />
                 </div>
               </div>
               <div className="w-1/2 flex flex-col">
@@ -145,10 +148,13 @@ export const Workspace: React.FC = () => {
                     <span className="text-neon-green">Success</span>
                   )}
                 </div>
-                <div className="flex-1 min-h-0 overflow-auto p-4">
-                  <pre className="text-xs font-mono text-text-primary">
-                    {ticket.latestResponse ? JSON.stringify(ticket.latestResponse, null, 2) : 'Run query to see response'}
-                  </pre>
+                <div className="flex-1 min-h-0">
+                  <MonacoEditorWrapper
+                    language="json"
+                    value={ticket.latestResponse ? JSON.stringify(ticket.latestResponse, null, 2) : '// Run query to see response'}
+                    onChange={() => {}}
+                    readOnly
+                  />
                 </div>
               </div>
             </div>

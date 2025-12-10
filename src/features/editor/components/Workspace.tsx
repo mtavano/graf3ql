@@ -5,7 +5,8 @@ import { QuerySelector } from '../../execution/components/QuerySelector';
 import { EnvironmentSelector } from '../../execution/components/EnvironmentSelector';
 import { RunQueryButton } from '../../execution/components/RunQueryButton';
 import { DiffViewer } from '../../diff/components/DiffViewer';
-import { Columns, GitCompare, Save } from 'lucide-react';
+import { Columns, GitCompare, Save, Wand2 } from 'lucide-react';
+import { print, parse } from 'graphql';
 
 export const Workspace: React.FC = () => {
   const { activeTicketId, getTicketById, updateTicket } = useTicketsStore();
@@ -17,6 +18,19 @@ export const Workspace: React.FC = () => {
   const handleSaveOriginal = () => {
     if (ticket.latestResponse) {
       updateTicket(ticket.id, { originalResponse: ticket.latestResponse });
+    }
+  };
+
+  const handlePrettyPrint = () => {
+    if (!ticket.queryText) return;
+    
+    try {
+      const ast = parse(ticket.queryText);
+      const formatted = print(ast);
+      updateTicket(ticket.id, { queryText: formatted });
+    } catch (error) {
+      // Si hay error de parsing, no hacer nada (query inválida)
+      console.warn('Could not format query:', error);
     }
   };
 
@@ -34,8 +48,16 @@ export const Workspace: React.FC = () => {
         {/* Editors Area */}
         <div className="flex-1 flex min-h-0 border-b border-border-default">
           <div className="w-3/5 border-r border-border-default flex flex-col">
-            <div className="px-4 py-2 bg-bg-tertiary border-b border-border-default text-xs font-medium text-text-secondary">
-              QUERY
+            <div className="px-4 py-2 bg-bg-tertiary border-b border-border-default text-xs font-medium text-text-secondary flex justify-between items-center">
+              <span>QUERY</span>
+              <button
+                onClick={handlePrettyPrint}
+                disabled={!ticket.queryText}
+                className="p-1 rounded hover:bg-bg-secondary text-text-muted hover:text-neon-purple disabled:opacity-50 transition-colors"
+                title="Pretty Print (Format)"
+              >
+                <Wand2 size={14} />
+              </button>
             </div>
             <div className="flex-1 min-h-0">
               <MonacoEditorWrapper

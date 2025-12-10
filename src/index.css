@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Dark Theme */
+  --bg-primary: #0a0e27;
+  --bg-secondary: #1a1f3a;
+  --bg-tertiary: #252b4a;
+
+  /* Neon Accents */
+  --neon-green: #00ff88;
+  --neon-purple: #bd00ff;
+  --neon-orange: #ff6b35;
+  --neon-pink: #ff2e63;
+
+  /* Text */
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+
+  /* Borders & Dividers */
+  --border-default: rgba(189, 0, 255, 0.2);
+  --border-hover: rgba(189, 0, 255, 0.5);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Diff Viewer Overrides */
+.jsondiffpatch-delta pre {
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+}
+
+.jsondiffpatch-added .jsondiffpatch-value {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--neon-green);
+}
+
+.jsondiffpatch-deleted .jsondiffpatch-value {
+  background: rgba(255, 46, 99, 0.1);
+  color: var(--neon-pink);
+  text-decoration: line-through;
+}
+
+.jsondiffpatch-modified .jsondiffpatch-value {
+  background: rgba(255, 107, 53, 0.1);
+  color: var(--neon-orange);
+}

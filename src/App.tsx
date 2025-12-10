@@ -1,5 +1,6 @@
 import { Layout } from './components/Layout';
 import { TicketDetail } from './features/tickets/components/TicketDetail';
+import { Workspace } from './features/editor/components/Workspace';
 import { useTicketsStore } from './features/tickets/store';
 
 function App() {
@@ -10,9 +11,7 @@ function App() {
       {activeTicketId ? (
         <>
           <TicketDetail />
-          <div className="flex-1 flex items-center justify-center text-text-muted">
-            Editor and Response Viewer Placeholder
-          </div>
+          <Workspace />
         </>
       ) : (
         <div className="flex-1 flex items-center justify-center text-text-muted">

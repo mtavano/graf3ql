@@ -92,29 +92,32 @@ export const Workspace: React.FC = () => {
         <div className="flex-1 flex min-h-0 bg-bg-primary flex-col">
           <div className="h-8 bg-bg-tertiary border-b border-border-default flex items-center justify-between px-4">
              <span className="text-xs font-medium text-text-secondary">RESPONSE</span>
-             <div className="flex gap-2">
+             <div className="flex gap-2 items-center">
                <button
                  onClick={handleSaveOriginal}
                  disabled={!ticket.latestResponse}
-                 className="p-1 rounded hover:bg-bg-tertiary text-text-muted hover:text-neon-green disabled:opacity-50 transition-colors"
-                 title="Save as Original"
+                 className="flex items-center gap-1 px-2 py-1 rounded hover:bg-bg-secondary text-text-muted hover:text-neon-green disabled:opacity-50 transition-colors text-xs"
+                 title="Copy latest response to original for comparison"
                >
-                 <Save size={14} />
+                 <Save size={12} />
+                 <span>Save</span>
                </button>
-               <div className="w-px h-4 bg-border-default mx-1 self-center" />
+               <div className="w-px h-4 bg-border-default mx-1" />
                <button
                  onClick={() => setShowDiff(false)}
-                 className={`p-1 rounded ${!showDiff ? 'bg-neon-purple/20 text-neon-purple' : 'text-text-muted hover:text-text-primary'}`}
-                 title="Split View"
+                 className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${!showDiff ? 'bg-neon-purple/20 text-neon-purple' : 'text-text-muted hover:text-text-primary hover:bg-bg-secondary'}`}
+                 title="Show original and latest side by side"
                >
-                 <Columns size={14} />
+                 <Columns size={12} />
+                 <span>Split</span>
                </button>
                <button
                  onClick={() => setShowDiff(true)}
-                 className={`p-1 rounded ${showDiff ? 'bg-neon-purple/20 text-neon-purple' : 'text-text-muted hover:text-text-primary'}`}
-                 title="Diff View"
+                 className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${showDiff ? 'bg-neon-purple/20 text-neon-purple' : 'text-text-muted hover:text-text-primary hover:bg-bg-secondary'}`}
+                 title="Show differences between original and latest"
                >
-                 <GitCompare size={14} />
+                 <GitCompare size={12} />
+                 <span>Diff</span>
                </button>
              </div>
           </div>

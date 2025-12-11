@@ -135,9 +135,15 @@ export const Workspace: React.FC = () => {
                 <div className="flex-1 min-h-0">
                   <MonacoEditorWrapper
                     language="json"
-                    value={ticket.originalResponse ? JSON.stringify(ticket.originalResponse, null, 2) : '// No original response saved'}
-                    onChange={() => {}}
-                    readOnly
+                    value={ticket.originalResponse ? JSON.stringify(ticket.originalResponse, null, 2) : ''}
+                    onChange={(value) => {
+                      try {
+                        const parsed = JSON.parse(value || '{}');
+                        updateTicket(ticket.id, { originalResponse: parsed });
+                      } catch (e) {
+                        // Ignore JSON parse errors while typing
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -151,9 +157,15 @@ export const Workspace: React.FC = () => {
                 <div className="flex-1 min-h-0">
                   <MonacoEditorWrapper
                     language="json"
-                    value={ticket.latestResponse ? JSON.stringify(ticket.latestResponse, null, 2) : '// Run query to see response'}
-                    onChange={() => {}}
-                    readOnly
+                    value={ticket.latestResponse ? JSON.stringify(ticket.latestResponse, null, 2) : ''}
+                    onChange={(value) => {
+                      try {
+                        const parsed = JSON.parse(value || '{}');
+                        updateTicket(ticket.id, { latestResponse: parsed });
+                      } catch (e) {
+                        // Ignore JSON parse errors while typing
+                      }
+                    }}
                   />
                 </div>
               </div>

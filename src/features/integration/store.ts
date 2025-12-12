@@ -22,8 +22,12 @@ export const useIntegrationStore = create<IntegrationState>()(
     {
       name: 'graf3ql:integration',
       partialize: (state) => ({ 
-        // Solo persistir las queries, no el handle (no es serializable)
-        availableQueries: state.availableQueries 
+        // Persistir queries con contenido (el handle no es serializable)
+        availableQueries: state.availableQueries.map(q => ({
+          name: q.name,
+          path: q.path,
+          content: q.content,
+        }))
       }),
     }
   )

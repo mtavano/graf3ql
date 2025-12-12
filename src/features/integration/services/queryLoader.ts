@@ -4,7 +4,7 @@ export interface QueryInfo {
   content?: string;  // Contenido del archivo (opcional)
 }
 
-// Función recursiva para buscar archivos .graphql
+// Función recursiva para buscar archivos .graphql y cargar su contenido
 const scanDirectory = async (
   directoryHandle: FileSystemDirectoryHandle,
   basePath: string = ''
@@ -20,9 +20,15 @@ const scanDirectory = async (
       const subQueries = await scanDirectory(entry as FileSystemDirectoryHandle, entryPath);
       queries.push(...subQueries);
     } else if (entry.kind === 'file' && entry.name.endsWith('.graphql')) {
+      // Cargar contenido del archivo inmediatamente
+      const fileHandle = entry as FileSystemFileHandle;
+      const file = await fileHandle.getFile();
+      const content = await file.text();
+      
       queries.push({
         name: entry.name.replace('.graphql', ''),
         path: entryPath,
+        content,
       });
     }
   }

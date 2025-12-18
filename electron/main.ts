@@ -57,12 +57,19 @@ async function createWindow() {
 
   // En desarrollo, carga desde Vite dev server
   // En producción, carga desde los archivos compilados
-  if (process.env.NODE_ENV === 'development') {
+  const isDev = !app.isPackaged;
+  
+  if (isDev) {
     const devServerUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
     mainWindow.loadURL(devServerUrl);
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+    // En producción: cargar desde el directorio de recursos de la app
+    const indexPath = path.join(app.getAppPath(), 'dist', 'index.html');
+    console.log('Loading index from:', indexPath);
+    mainWindow.loadFile(indexPath);
+    // Abrir DevTools para depurar (remover después)
+    mainWindow.webContents.openDevTools();
   }
 
   mainWindow.on('closed', () => {

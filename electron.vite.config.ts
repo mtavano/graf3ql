@@ -27,6 +27,7 @@ export default defineConfig({
   },
   renderer: {
     root: '.',
+    base: './', // Rutas relativas para Electron (file://)
     build: {
       outDir: 'dist',
       rollupOptions: {

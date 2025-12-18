@@ -1,9 +1,12 @@
 // Environment configuration for GraphQL endpoints
-// Values are read from environment variables (Vite)
+// Now supports dynamic configuration via environments store
 
-export type Environment = 'local' | 'acc' | 'stage' | 'prod';
+import { useEnvironmentsStore } from '../features/environments/store';
 
-const endpoints: Record<Environment, string> = {
+export type Environment = string;
+
+// Legacy fallbacks from env vars (for backwards compatibility in web mode)
+const legacyEndpoints: Record<string, string> = {
   local: import.meta.env.VITE_GRAPHQL_ENDPOINT_LOCAL || 'http://localhost:3000/graphql',
   acc: import.meta.env.VITE_GRAPHQL_ENDPOINT_ACC || '',
   stage: import.meta.env.VITE_GRAPHQL_ENDPOINT_STAGE || '',
@@ -11,14 +14,37 @@ const endpoints: Record<Environment, string> = {
 };
 
 export const getEndpointForEnvironment = (env: Environment): string => {
-  const endpoint = endpoints[env];
-  if (!endpoint) {
-    console.warn(`No endpoint configured for environment: ${env}`);
+  // First, try to get from the environments store (in-app configuration)
+  const { environments } = useEnvironmentsStore.getState();
+  const configuredEnv = environments.find((e) => e.name === env);
+
+  if (configuredEnv?.url) {
+    return configuredEnv.url;
   }
-  return endpoint;
+
+  // Fallback to legacy env vars
+  const legacyEndpoint = legacyEndpoints[env];
+  if (legacyEndpoint) {
+    return legacyEndpoint;
+  }
+
+  console.warn(`No endpoint configured for environment: ${env}`);
+  return '';
 };
 
 export const isEnvironmentConfigured = (env: Environment): boolean => {
-  return Boolean(endpoints[env]);
+  const { environments } = useEnvironmentsStore.getState();
+  const configuredEnv = environments.find((e) => e.name === env);
+
+  if (configuredEnv?.url) {
+    return true;
+  }
+
+  return Boolean(legacyEndpoints[env]);
+};
+
+export const getAvailableEnvironments = (): string[] => {
+  const { environments } = useEnvironmentsStore.getState();
+  return environments.map((e) => e.name);
 };
 

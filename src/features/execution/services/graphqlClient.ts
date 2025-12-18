@@ -1,5 +1,18 @@
+import { useEnvironmentsStore } from '../../environments/store';
+
 // URL del proxy server (relativa para funcionar en cualquier dominio)
-const PROXY_URL = import.meta.env.VITE_PROXY_URL || '/api/proxy';
+const DEFAULT_PROXY_URL = import.meta.env.VITE_PROXY_URL || '/api/proxy';
+
+// Obtener la URL del proxy (dinámica en Electron)
+const getProxyUrl = (): string => {
+  const { proxyUrl, isElectron } = useEnvironmentsStore.getState();
+
+  if (isElectron && proxyUrl) {
+    return proxyUrl;
+  }
+
+  return DEFAULT_PROXY_URL;
+};
 
 export interface GraphQLResponse {
   data: any;
@@ -14,9 +27,10 @@ export const executeQuery = async (
   headers: Record<string, string> = {}
 ): Promise<GraphQLResponse> => {
   const startTime = performance.now();
-  
+  const proxyUrl = getProxyUrl();
+
   try {
-    const response = await fetch(PROXY_URL, {
+    const response = await fetch(proxyUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

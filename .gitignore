@@ -6,7 +6,10 @@ node_modules
 # Build outputs
 dist
 dist-ssr
+dist-electron
+dist-server
 build
+release
 *.local
 
 # Logs
